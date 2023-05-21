@@ -1,0 +1,73 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+	<%- include('../includes/navigation.ejs') %>
+	<main>
+		<% if (type === 'category') { %>
+		<form class="product-form"
+					action="/categories/<% if (editing) { %>edit-category/<%= product.id %><% } else { %>add-category<% } %>"
+					method="POST">
+		<% } %>
+		<% if (type === 'item') { %>
+		<form class="product-form"
+					action="/items/<% if (editing) { %>edit-item/<%= product.id %><% } else { %>add-item<% } %>"
+					method="POST">
+		<% } %>
+			<div class="form-control">
+				<% if (type === 'category') { %>
+					<label for="title">Title</label>
+					<input type="text" name="title" id="title" value="<% if (editing) { %><%= product.title %><% } %>">
+				<% } %>
+				<% if (type === 'item') { %>
+					<label for="brand">Brand</label>
+					<input type="text" name="brand" id="brand" value="<% if (editing) { %><%= product.brand %><% } %>">
+				<% } %>
+			</div>
+			<% if (type === 'item') { %>
+				<div class="form-control">
+					<label for="price">Price</label>
+					<input type="number" name="price" id="price" step="0.01" value="<% if (editing) { %><%= product.price %><% } %>"
+				</div>
+				<div class="form-control">
+					<label for="stock">Stock</label>
+					<input type="number" name="stock" id="stock" step="1" value="<% if (editing) { %><%= product.stock %><% } %>"
+				</div>
+			<% } %>
+			<div class="form-control">
+				<label for="imageUrl">Image URL</label>
+				<input type="text" name="imageUrl" id="imageUrl" value="<% if (editing) { %><%= product.imageUrl %><% } %>">
+			</div>
+			<% if (type === 'item') { %>
+				<input type="hidden" value="<%= categoryId %>" name="categoryId">
+			<% } %>
+			<% if (editing) { %>
+				<input type="hidden" value="<%= product.id %>" name="productId">
+			<% } %>
+			<button class="btn" type="submit">
+				<% if (type === 'category') { %>
+					<% if (editing) { %>
+						Update Category
+					<% } else { %>
+						Add Category
+					<% } %>
+				<% } %>
+				<% if (type === 'item') { %>
+					<% if (editing) { %>
+						Update Item
+					<% } else { %>
+						Add Item
+					<% } %>
+				<% } %>
+			</button>
+			<% if (type === 'category') { %>
+				<a href="/" class="btn">Back</a>
+			<% } %>
+			<% if (type === 'item') { %>
+				<a href="/items/<%= categoryId %>" class="btn">Back</a>
+			<% } %>
+		</form>
+	</main>
+<%- include('../includes/end.ejs') %>

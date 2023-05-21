@@ -1,0 +1,72 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+  <%- include('../includes/navigation.ejs') %>
+
+  <main>
+    <% if (products.length > 0) { %>
+      <div class="grid">
+        <% for (let product of products) { %>
+          <article class="card product-item">
+            <header class="card__header">
+              <h1 class="product__title">
+                <% if (type === 'category') { %>
+                  <%= product.title %>
+                <% } else if (type === 'item') { %>
+                  <%= product.brand %>
+                <% } %>
+              </h1>
+            </header>
+            <div class="card__image">
+              <img src="<%= product.imageUrl %>" alt="<%= product.title %>">
+            </div>
+            <% if (type === 'item') { %>
+              <div class="card__content">
+  							<h2 class="product__price">PHP
+  									<%= product.price %>
+  							</h2>
+  							<p class="product__description">
+  									Stocks left: <%= product.stock %>
+  							</p>
+  						</div>
+            <% } %>
+            <div class="card__actions">
+              <% if (type === 'category') { %>
+                <a href="/items/<%= product.id %>" class="btn">View items</a>
+                <a href="/categories/edit-category/<%= product.id %>?edit=true" class="btn">Edit</a>
+                <form action="/categories/delete-category/<%= product.id %>" method="POST">
+                  <input type="hidden" value="<%= product.id %>" name="categoryId">
+                  <button class="btn" type="submit">Delete</button>
+                </form>
+              <% } %>
+              <% if (type === 'item') { %>
+                <a href="/items/edit-item/<%= product.id %>?edit=true" class="btn">Edit</a>
+                <form action="delete-item/<%= product.id %>" method="POST">
+                  <input type="hidden" value="<%= product.id %>" name="categoryId">
+                  <button class="btn" type="submit">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </article>
+        <% } %>
+      </div>
+    <% } else { %>
+      <h1>No Products Found!</h1>
+    <% } %>
+      <div class="card__actions">
+        <a href="/<% if (type === 'category') { %>categories/add-category<% } else if (type === 'item') { %>items/add-item/<%= categoryId %><% } %>"
+           class="btn">
+          <% if (type === 'category') { %>
+            Add Category
+          <% } else if (type === 'item') { %>
+            Add Item
+          <% } %>
+        </a>
+        <% if (type === 'item') { %>
+          <a href="/categories" class="btn">Back</a>
+        <% } %>
+      </div>
+  </main>
+<%- include('../includes/end.ejs') %>
